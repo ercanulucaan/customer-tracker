@@ -42,14 +42,19 @@ npm install
 PORT=3000
 MONGODB_URI=mongodb://localhost:27017/customer-tracker
 JWT_SECRET=your-secret-key
-JWT_EXPIRE=24h
+FRONTEND_URL=http://localhost:3001
+CORS_ORIGIN=http://localhost:3001 
 NODE_ENV=development
 ```
 
 4. Frontend .env dosyasını oluşturun:
 ```env
 # Frontend/.env
-API_BASE_URL=http://localhost:3000
+PORT=3001
+BACKEND_URL=http://localhost:3000
+MONGODB_URI=mongodb://localhost:27017/customer-tracker
+SESSION_SECRET=your-secret-key
+API_BASE_URL=/api 
 ```
 
 5. Uygulamayı başlatın:
