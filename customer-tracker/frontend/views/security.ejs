@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Güvenlik - Müşteri Takip Sistemi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .main-content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <h3 class="mb-4">Müşteri Takip</h3>
+                <div class="list-group">
+                    <a href="/dashboard" class="list-group-item list-group-item-action">
+                        <i class="bi bi-speedometer2"></i> Gösterge Paneli
+                    </a>
+                    <a href="/customers" class="list-group-item list-group-item-action">
+                        <i class="bi bi-people"></i> Müşteriler
+                    </a>
+                    <a href="/reports" class="list-group-item list-group-item-action">
+                        <i class="bi bi-graph-up"></i> Raporlar
+                    </a>
+                    <a href="/security" class="list-group-item list-group-item-action active">
+                        <i class="bi bi-shield-lock"></i> Güvenlik
+                    </a>
+                    <a href="/logout" class="list-group-item list-group-item-action">
+                        <i class="bi bi-box-arrow-right"></i> Çıkış
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <h2 class="mb-4">Güvenlik Ayarları</h2>
+
+                <!-- 2FA Durumu -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">İki Faktörlü Doğrulama (2FA)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6 class="mb-1">Durum</h6>
+                                <span id="twoFactorStatus" class="badge bg-secondary">Kontrol ediliyor...</span>
+                            </div>
+                            <div>
+                                <button id="setup2FA" class="btn btn-primary">2FA Kurulumu</button>
+                            </div>
+                        </div>
+
+                        <!-- 2FA Kurulum Alanı -->
+                        <div id="setupArea" class="d-none">
+                            <div class="mb-3">
+                                <h6>QR Kodu Tarayın</h6>
+                                <div id="qrCode" class="mb-2"></div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Manuel Giriş Kodu</span>
+                                    <input type="text" id="secret" class="form-control" readonly>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Doğrulama Kodu</span>
+                                    <input type="text" id="verifyCode" class="form-control" placeholder="6 haneli kodu girin">
+                                    <button id="verify2FA" class="btn btn-success">Doğrula</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2FA Devre Dışı Bırakma Alanı -->
+                        <div id="disableArea" class="d-none">
+                            <div class="input-group">
+                                <span class="input-group-text">Doğrulama Kodu</span>
+                                <input type="text" id="disableCode" class="form-control" placeholder="6 haneli kodu girin">
+                                <button id="disable2FA" class="btn btn-danger">Devre Dışı Bırak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.API_BASE_URL = '<%= process.env.API_BASE_URL %>';
+        window.TOKEN = '<%= token %>';
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/security.js"></script>
+</body>
+</html> 

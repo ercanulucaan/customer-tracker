@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Müşteriler - Müşteri Takip Sistemi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .customer-card {
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .transaction-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <h3 class="mb-4">Müşteri Takip</h3>
+                <div class="list-group">
+                    <a href="/dashboard" class="list-group-item list-group-item-action">
+                        <i class="bi bi-speedometer2"></i> Gösterge Paneli
+                    </a>
+                    <a href="/customers" class="list-group-item list-group-item-action active">
+                        <i class="bi bi-people"></i> Müşteriler
+                    </a>
+                    <a href="/reports" class="list-group-item list-group-item-action">
+                        <i class="bi bi-graph-up"></i> Raporlar
+                    </a>
+                    <a href="/security" class="list-group-item list-group-item-action">
+                        <i class="bi bi-shield-lock"></i> Güvenlik
+                    </a>
+                    <a href="/logout" class="list-group-item list-group-item-action">
+                        <i class="bi bi-box-arrow-right"></i> Çıkış
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Müşteriler</h2>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+                        <i class="bi bi-plus"></i> Yeni Müşteri
+                    </button>
+                </div>
+
+                <!-- Müşteri Listesi -->
+                <div class="row" id="customerList">
+                    <!-- Müşteriler JavaScript ile doldurulacak -->
+                </div>
+
+                <!-- Müşteri Detay Modal -->
+                <div class="modal fade" id="customerDetailModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Müşteri Detayları</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Müşteri Bilgileri</h6>
+                                        <p><strong>Ad:</strong> <span id="detailName"></span></p>
+                                        <p><strong>Telefon:</strong> <span id="detailPhone"></span></p>
+                                        <p><strong>Adres:</strong> <span id="detailAddress"></span></p>
+                                        <p><strong>Notlar:</strong> <span id="detailNotes"></span></p>
+                                        <p><strong>Bakiye:</strong> <span id="detailBalance"></span></p>
+                                        <p><strong>Son Ödeme:</strong> <span id="detailLastPayment"></span></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Son İşlemler</h6>
+                                        <div class="transaction-list" id="detailTransactions">
+                                            <!-- İşlemler JavaScript ile doldurulacak -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTransactionModal">
+                                    <i class="bi bi-plus"></i> İşlem Ekle
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editCustomerModal">
+                                    <i class="bi bi-pencil"></i> Düzenle
+                                </button>
+                                <button type="button" class="btn btn-danger" id="deleteCustomerBtn" data-customer-id="">
+                                    <i class="bi bi-trash"></i> Sil
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Yeni Müşteri Modal -->
+                <div class="modal fade" id="addCustomerModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Yeni Müşteri</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addCustomerForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Ad</label>
+                                        <input type="text" class="form-control" name="name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Telefon</label>
+                                        <input type="tel" class="form-control" name="phone" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Adres</label>
+                                        <textarea class="form-control" name="address" rows="2"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Notlar</label>
+                                        <textarea class="form-control" name="notes" rows="2"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Bakiye</label>
+                                        <input type="number" class="form-control" name="balance" value="0" step="0.01">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Son Ödeme Tarihi</label>
+                                        <input type="date" class="form-control" name="lastPaymentDate">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Son Ödeme Tutarı</label>
+                                        <input type="number" class="form-control" name="lastPaymentAmount" value="0" step="0.01">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                <button type="button" class="btn btn-primary" id="saveCustomerBtn">Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Müşteri Düzenle Modal -->
+                <div class="modal fade" id="editCustomerModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Müşteri Düzenle</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editCustomerForm">
+                                    <input type="hidden" name="id">
+                                    <div class="mb-3">
+                                        <label class="form-label">Ad</label>
+                                        <input type="text" class="form-control" name="name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Telefon</label>
+                                        <input type="tel" class="form-control" name="phone" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Adres</label>
+                                        <textarea class="form-control" name="address" rows="2"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Notlar</label>
+                                        <textarea class="form-control" name="notes" rows="2"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Bakiye</label>
+                                        <input type="number" class="form-control" name="balance" value="0" step="0.01">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Son Ödeme Tarihi</label>
+                                        <input type="date" class="form-control" name="lastPaymentDate">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Son Ödeme Tutarı</label>
+                                        <input type="number" class="form-control" name="lastPaymentAmount" value="0" step="0.01">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                <button type="button" class="btn btn-primary" id="updateCustomerBtn">Güncelle</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- İşlem Ekle Modal -->
+                <div class="modal fade" id="addTransactionModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">İşlem Ekle</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addTransactionForm">
+                                    <input type="hidden" name="customerId">
+                                    <div class="mb-3">
+                                        <label class="form-label">İşlem Tipi</label>
+                                        <select class="form-select" name="type" required>
+                                            <option value="gelen">Gelen</option>
+                                            <option value="giden">Giden</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Tutar</label>
+                                        <input type="number" class="form-control" name="amount" required min="0" step="0.01">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Tarih</label>
+                                        <input type="date" class="form-control" name="date" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Açıklama</label>
+                                        <textarea class="form-control" name="description" rows="2"></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                <button type="button" class="btn btn-primary" id="saveTransactionBtn">Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- İşlem Düzenle Modal -->
+                <div class="modal fade" id="editTransactionModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">İşlem Düzenle</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editTransactionForm">
+                                    <input type="hidden" name="id">
+                                    <input type="hidden" name="customerId">
+                                    <div class="mb-3">
+                                        <label class="form-label">İşlem Tipi</label>
+                                        <select class="form-select" name="type" required>
+                                            <option value="gelen">Gelen</option>
+                                            <option value="giden">Giden</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Tutar</label>
+                                        <input type="number" class="form-control" name="amount" required min="0" step="0.01">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Tarih</label>
+                                        <input type="date" class="form-control" name="date" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Açıklama</label>
+                                        <textarea class="form-control" name="description" rows="2"></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                <button type="button" class="btn btn-primary" id="updateTransactionBtn">Güncelle</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.API_BASE_URL = '<%= process.env.API_BASE_URL %>';
+        window.TOKEN = '<%= token %>';
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+    <script src="/js/customers.js"></script>
+</body>
+</html> 
