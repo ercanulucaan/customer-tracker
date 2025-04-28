@@ -27,18 +27,39 @@ cd customer-tracker
 
 2. Bağımlılıkları yükleyin:
 ```bash
+# Backend bağımlılıkları
+cd backend
+npm install
+
+# Frontend bağımlılıkları
+cd ../frontend
 npm install
 ```
 
-3. .env dosyasını oluşturun:
+3. Backend .env dosyasını oluşturun:
 ```env
+# Backend/.env
 PORT=3000
 MONGODB_URI=mongodb://localhost:27017/customer-tracker
 JWT_SECRET=your-secret-key
+JWT_EXPIRE=24h
+NODE_ENV=development
 ```
 
-4. Uygulamayı başlatın:
+4. Frontend .env dosyasını oluşturun:
+```env
+# Frontend/.env
+API_BASE_URL=http://localhost:3000
+```
+
+5. Uygulamayı başlatın:
 ```bash
+# Backend'i başlat
+cd backend
+npm start
+
+# Frontend'i başlat (yeni bir terminal penceresinde)
+cd frontend
 npm start
 ```
 
